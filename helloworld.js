@@ -1,15 +1,17 @@
-var http = require("http")
+var Browser = require('zombie')
+var assert = require('assert')
+var app = require('../helloworld')
 
-http.createServer(function (request, response) {
 
-   // Send the HTTP header
-   // HTTP Status: 200 : OK
-   // Content Type: text/plain
-   response.writeHead(200, {'Content-Type': 'text/plain'})
-
-   // Send the response body as "Hello World"
-   response.end('Hello Rebecca\n')
-}).listen(3333)
-
-// Console will print the message
-console.log('Server running')
+describe('main page', function() { 
+  before(function() {
+    this.browser = new Browser({ site: 'http://localhost:3000' })
+  })
+  before(function(done) {
+    this.browser.visit('/', done)
+  })
+  it('should say hello world', function() { 
+    assert.ok(this.browser.success)
+    assert.equal(this.browser.text(), "Hello World")
+  })
+})
